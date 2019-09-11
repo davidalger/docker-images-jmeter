@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- jmeter "$@"
+fi
+
+declare PARAMS=()
+declare T_ARG=
+
+while (( "$#" )); do
+  case "$1" in
+    -t)
+      PARAMS+=($1) && shift
+      PARAMS+=($1) && T_ARG=($1) && shift
+      ;;
+    *)
+      PARAMS+=($1)
+      shift
+      ;;
+  esac
+done
+
+if [ ${T_ARG:-} ]; then
+  PluginsManagerCMD.sh install-for-jmx ${T_ARG}
+fi
+
+exec "${PARAMS[@]}"

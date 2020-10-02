@@ -42,7 +42,7 @@ RUN curl -sL https://search.maven.org/remotecontent?filepath=com/google/code/gso
 ## Copy Apache Maven binary from builder image
 COPY --from=builder /opt/apache-maven-*/lib/maven-artifact-*.jar ${JMETER_HOME}/lib/
 
-ENV PATH $PATH:/opt/apache-jmeter/bin
+ENV PATH $PATH:${JMETER_HOME}/bin
 COPY docker-entrypoint /usr/local/bin
 
 ENTRYPOINT ["docker-entrypoint"]

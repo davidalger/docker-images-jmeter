@@ -12,13 +12,13 @@ RUN cd /opt \
 
 FROM centos:7
 
-ARG JMETER_VERSION=5.1.1
-ENV JMETER_HOME /opt/apache-jmeter
-
 ## Install jMeter dependencies
 RUN yum install -y -q java bc \
     && yum clean all \
     && rm -rf /var/cache/yum
+
+ARG JMETER_VERSION=5.1.1
+ENV JMETER_HOME /opt/apache-jmeter
 
 ## Install Apache jMeter
 RUN curl -s https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz \

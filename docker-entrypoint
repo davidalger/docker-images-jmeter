@@ -26,4 +26,22 @@ if [ ${T_ARG:-} ]; then
   PluginsManagerCMD.sh install-for-jmx ${T_ARG}
 fi
 
-exec "${PARAMS[@]}"
+# Launch JMeter as sub-process, otherwise fork
+if [[ "${PARAMS[0]}" == "jmeter" ]]; then
+  "${PARAMS[@]}"
+
+  # When JMeter exits, wait 2 seconds for it to come back before exiting
+  while true; do
+    sleep 1
+    if ps x | egrep [o]penjdk >/dev/null; then
+      continue
+    else
+      sleep 2
+      if ! ps x | egrep [o]penjdk >/dev/null; then
+        exit
+      fi
+    fi
+  done
+else
+  exec "${PARAMS[@]}"
+fi
